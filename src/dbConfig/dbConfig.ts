@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-
+//set the bugs for mongo
  export async function connection(){
      try {
        
