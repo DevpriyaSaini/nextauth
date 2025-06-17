@@ -1,18 +1,15 @@
-import user from "@/models/usermodel"
-import { connection } from "@/dbConfig/dbConfig"
-import { NextRequest,NextResponse } from "next/server"
-import  jwt from "jsonwebtoken";
+import { NextRequest } from "next/server";
+import jwt from "jsonwebtoken";
 
-
-connection();
-export async function getdata(request:NextRequest) {
+export async function getdata(request: NextRequest) {
     try {
-        const token=request.cookies.get("token")?.value||"";
-      const decode:any= jwt.verify(token,process.env. TOKEN_SECRET!);
-      return decode.id;
-    } catch (error:any) {
-        return NextResponse.json({error: error.message},{
-            status:500
-        })
+        const token = request.cookies.get("token")?.value || "";
+        if (!token) return null;
+        
+        const decoded: any = jwt.verify(token, process.env.TOKEN_SECRET!);
+        return decoded.id; // Should return string or null/undefined only
+    } catch (error) {
+        console.error("Token verification error:", error);
+        return null; // Return null instead of NextResponse
     }
 }

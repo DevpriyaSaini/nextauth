@@ -8,7 +8,13 @@ import next from "next";
   export async function POST(request:NextRequest) {
     //extract data from token
   const userId=  await getdata(request);
-  const users=user.findOne({_id:userId}).select("-password")
+  if (!userId) {
+            return NextResponse.json(
+                { error: "User ID not found in token" },
+                { status: 400 }
+            );
+        }
+  const users=await user.findOne({_id:userId}).select("-password")
 return NextResponse.json({
     msg:"user found",
     data:users
