@@ -6,7 +6,7 @@ import { sendmail } from "@/helpers/mailer";
 
  connection();
 
- export async function Post(request:NextRequest) {
+ export async function POST(request:NextRequest) {
     try {
         const reqbody= await request.json();
         const{username,email,password}=reqbody;
@@ -25,6 +25,7 @@ import { sendmail } from "@/helpers/mailer";
            })
            const saveuser=await newuser.save();
            console.log(saveuser);
+           
            //send verification
         await sendmail({email,emailType:"VERIFY",userId:saveuser._id})
         return NextResponse.json({

@@ -8,30 +8,24 @@ export const sendmail=async({email,emailType,userId}:any)=>{
          const hasedtoken=await bcrypt.hash(userId.toString(),10);
        if(emailType=='VERIFY'){
        await user.findByIdAndUpdate(userId,{
-        verifyToken:hasedtoken,
-        verifyTokenExpiry:Date.now()+36000
+       $set:{ verifyToken:hasedtoken,
+        verifyTokenExpiry:new Date(Date.now()+360000)}
        })
        }
        else if(emailType=='RESET'){
          await user.findByIdAndUpdate(userId,{
+          $set:{
         forgotpasswordToken:hasedtoken,
-        forgotpasswordTokenExpiry:Date.now()+36000
+        forgotpasswordTokenExpiry:new Date(Date.now()+360000)
+          }
        })
        }
- 
 
-
-
-
-
-
-
-        var transport = nodemailer.createTransport({
-  host: "sandbox.smtp.mailtrap.io",
-  port: 2525,
+       const transporter = nodemailer.createTransport({
+  service: 'gmail',
   auth: {
-    user: "77b63fa2aeeff4",
-    pass: "****953b"
+    user: process.env.GMAIL_USER,  
+    pass: process.env.GMAIL_APP_PASS  
   }
 });
 const mailoption={
@@ -47,7 +41,7 @@ or copy and paste the link below in your browser.
 </p>`
 
 }
- const mailresponse=await transport.sendMail(mailoption)
+ const mailresponse=await transporter.sendMail(mailoption)
 return mailresponse
         
     } catch (error:any) {

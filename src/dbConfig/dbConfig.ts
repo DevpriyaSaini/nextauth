@@ -4,7 +4,7 @@ import mongoose from "mongoose";
  export async function connection(){
      try {
        
-        mongoose.connect("amongodb+srv://devpriyasaini:Anilsaini70177@cluster01.kzupp.mongodb.net/Cluster01")
+        mongoose.connect("mongodb+srv://devpriyasaini:Anilsaini70177@cluster01.kzupp.mongodb.net/Cluster01")
         const connect= mongoose.connection
         connect.on('connected',()=>{
             console.log("mongo connected");
